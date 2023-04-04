@@ -1,31 +1,64 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from '@views/Login/Login';
+import Login from './views/Login/Login';
+import Home from './views/Home/Home';
+import CreateTask from './views/CreateTask/CreateTask';
+import Task from './views/Task/Task';
+import TasksManager from './views/TasksManager/TasksManager';
+import UsersManager from './views/UsersManager/UsersManager';
+import GroupTasks from './views/GroupTasks/GroupTasks';
+
 
 
 const router = createBrowserRouter([
   {
-    path: '/login',
-    element: <Login />,
+    path: '/',
+    element: <Home />,
     errorElement: <div>404</div>,
   },
   {
     path: '/login',
-    element: <Register />,
-    errorElement: <Home />,
+    element: <Login />,
+    errorElement: <div>404</div>,
   }
+  ,
+  {
+    path: '/CreateTask',
+    element: <CreateTask />,
+    errorElement: <div>404</div>,
+  }
+  ,
+  {
+    path: '/Task',
+    element: <Task />,
+    errorElement: <div>404</div>,
+  }
+  ,
+  {
+    path: '/TasksManager',
+    element: <TasksManager />,
+    errorElement: <div>404</div>,
+  }
+  ,
+  {
+    path: '/UsersManager',
+    element: <UsersManager />,
+    errorElement: <div>404</div>,
+  }
+  ,
+  {
+    path: '/GroupTasks',
+    element: <GroupTasks />,
+    errorElement: <div>404</div>,
+  }
+
 ]);
 
-const reactRoot = () => {
-  ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-      <RouterProvider router={router} />
-    </React.StrictMode>
-  );
-};
-function createBrowserRouter(arg0: { path: string; element: JSX.Element; errorElement: JSX.Element; }[]) {
-  throw new Error('Function not implemented.');
-}
+let root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
+root.render(
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>,
+);
