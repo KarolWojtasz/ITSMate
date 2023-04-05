@@ -5,13 +5,6 @@
     align-items: center;
 }
 
-.formContainer {
-    width: 100vw;
-    justify-content: space-evenly;
-    display: flex;
-    justify-self: center;
-    flex-direction: row;
-}
 
 
 .inputForm {
@@ -33,6 +26,7 @@
 
 .rightBar {
     display: flex;
+    align-items: center;
     justify-content: center;
     flex-direction: column;
 }

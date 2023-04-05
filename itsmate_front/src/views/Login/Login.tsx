@@ -5,6 +5,8 @@ import Button from '../../components/Button/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import Input from '../../components/Input/Input';
+import Logo from '../../images/logo.png';
+
 const fetchUrl = "http://127.0.0.1:8080/login";
 
 
@@ -46,20 +48,15 @@ function Login() {
     return (
         <Page content>
             <div className={style.container}>
-                <div className={style.formContainer}>
 
-                    <div className={style.rightBar}>
-                        <div className='leftBar'>
-                            <img alt='ITSMate logo' />
-                        </div>
-                        <div className={style.title}>Login</div>
+                <div className={style.rightBar}>
+                    <img src={Logo} alt='ITSMate logo' />
 
-                        <Input useRef={name} className={style.inputForm} type='text' text="Name" />
-                        <Input useRef={password} type="password" className={style.inputForm} text="Password" />
+                    <div className={style.title}>Login</div>
 
-
-                        <Button text="LOGIN" />
-                    </div>
+                    <Input useRef={name} className={style.inputForm} type='text' text="Name" />
+                    <Input useRef={password} type="password" className={style.inputForm} text="Password" />
+                    <Button onClick={loginRequest} text="LOGIN" />
                 </div>
 
             </div>
