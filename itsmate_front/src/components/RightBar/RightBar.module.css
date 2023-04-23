@@ -1,0 +1,38 @@
+.rightBar {
+    width: 75%;
+    box-sizing: border-box;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 80px;
+    justify-content: flex-start;
+    overflow-y: scroll;
+}
+
+.rightBar h1 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 55px;
+    color: #FFFFFF;
+}
+
+.rightBar::-webkit-scrollbar {
+    display: none;
+}
+
+.rightBar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.contentItems {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+}

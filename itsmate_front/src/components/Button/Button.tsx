@@ -4,17 +4,19 @@ import style from './Button.module.css';
 
 
 export interface InputProps {
+    link?: string,
     text: string;
-    width?: string;
     onClick?: () => void;
+    width?: string;
     className?: string;
     id?: string;
 }
 
 export default class Button extends Component<InputProps> {
+
     render() {
         return (
-            <button className={[style.buttonGrey].join(' ')} onClick={this.props.onClick} id={this.props.id}>
+            <button onClick={this.props.onClick} className={[style.buttonGrey].join(' ')} id={this.props.id}>
                 {this.props.text}
             </button>
         );
