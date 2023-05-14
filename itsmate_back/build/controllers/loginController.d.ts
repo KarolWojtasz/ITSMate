@@ -1,7 +1,12 @@
-declare const login: (req: any, res: any) => void;
-declare const getUsers: (req: any, res: any) => void;
-declare const getGroups: (req: any, res: any) => void;
-declare const deleteUser: (req: any, res: any) => void;
-declare const deleteGroup: (req: any, res: any) => void;
-declare const addUser: (req: any, res: any) => void;
-declare const addGroup: (req: any, res: any) => void;
+import { DataSource } from "typeorm";
+export default class loginController {
+    login(req: any, res: any, database: DataSource): void;
+    addUserToGroup(req: any, res: any, database: DataSource): Promise<void>;
+    getUsers(req: any, res: any, database: DataSource): Promise<void>;
+    getGroups(req: any, res: any, database: DataSource): Promise<void>;
+    deleteUser(req: any, res: any, database: DataSource): Promise<void>;
+    deleteUserFromGroup(req: any, res: any, database: DataSource): Promise<void>;
+    deleteGroup(req: any, res: any, database: DataSource): Promise<void>;
+    addUser(req: any, res: any, database: DataSource): Promise<void>;
+    addGroup(req: any, res: any, database: DataSource): Promise<void>;
+}

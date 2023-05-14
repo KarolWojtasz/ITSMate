@@ -1,24 +1,26 @@
 import express from 'express';
 import "reflect-metadata";
-import routes from './routes';
+import myRouter from './routes';
 
 class App {
     public server;
-
     constructor() {
         this.server = express();
 
         this.middlewares();
         this.routes();
+
     }
 
     middlewares() {
         this.server.use(express.json());
     }
 
-    routes() {
-        this.server.use(routes);
+    async routes() {
+        const r = await new myRouter().getRoutes();
+        this.server.use(r);
     }
+
 }
 
 export default new App().server;

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const express_1 = tslib_1.__importDefault(require("express"));
+require("reflect-metadata");
 const routes_1 = tslib_1.__importDefault(require("./routes"));
 class App {
     server;
@@ -13,8 +14,9 @@ class App {
     middlewares() {
         this.server.use(express_1.default.json());
     }
-    routes() {
-        this.server.use(routes_1.default);
+    async routes() {
+        const r = await new routes_1.default().getRoutes();
+        this.server.use(r);
     }
 }
 exports.default = new App().server;

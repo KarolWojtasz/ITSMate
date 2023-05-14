@@ -34,6 +34,6 @@ export class Task {
     @Column({ type: "int", nullable: false, default: 0 })
     stage!: number;
 
-    @Column({ type: "bytea", nullable: true })
-    attachment!: Buffer;
+    @Column()
+    attachment!: Array<String>;
 }
