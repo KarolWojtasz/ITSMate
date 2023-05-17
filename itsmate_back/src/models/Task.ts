@@ -31,9 +31,9 @@ export class Task {
     @Column({ default: 0 })
     priority!: number;
 
-    @Column({ type: "int", nullable: false, default: 0 })
+    @Column({ type: "int", default: 0 })
     stage!: number;
 
-    @Column()
-    attachment!: Array<String>;
+    @Column({ nullable: true })
+    attachment!: String;
 }

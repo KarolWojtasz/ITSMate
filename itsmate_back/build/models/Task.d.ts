@@ -11,5 +11,5 @@ export declare class Task {
     dueDate: Date;
     priority: number;
     stage: number;
-    attachment: Array<String>;
+    attachment: String;
 }

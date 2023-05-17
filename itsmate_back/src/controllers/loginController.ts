@@ -12,7 +12,6 @@ export default class loginController {
     }
 
     async addUserToGroup(req: any, res: any, database: DataSource) {
-        console.log("XD")
         try {
             const grMember = new GroupMember();
             grMember.groupId = req.body.groupId;

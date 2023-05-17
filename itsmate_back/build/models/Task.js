@@ -55,12 +55,12 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Number)
 ], Task.prototype, "priority", void 0);
 tslib_1.__decorate([
-    (0, typeorm_1.Column)({ type: "int", nullable: false, default: 0 }),
+    (0, typeorm_1.Column)({ type: "int", default: 0 }),
     tslib_1.__metadata("design:type", Number)
 ], Task.prototype, "stage", void 0);
 tslib_1.__decorate([
-    (0, typeorm_1.Column)(),
-    tslib_1.__metadata("design:type", Array)
+    (0, typeorm_1.Column)({ nullable: true }),
+    tslib_1.__metadata("design:type", String)
 ], Task.prototype, "attachment", void 0);
 Task = tslib_1.__decorate([
     (0, typeorm_1.Entity)()

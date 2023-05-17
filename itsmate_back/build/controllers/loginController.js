@@ -9,7 +9,6 @@ class loginController {
         res.json({ logged: true });
     }
     async addUserToGroup(req, res, database) {
-        console.log("XD");
         try {
             const grMember = new GroupMembers_1.GroupMember();
             grMember.groupId = req.body.groupId;
