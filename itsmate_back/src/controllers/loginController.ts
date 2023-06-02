@@ -9,15 +9,42 @@ const bcrypt = require("bcrypt")
 
 export default class loginController {
     //post
-    login(req: any, res: any, database: DataSource) {
+    async login(req: any, res: any, database: DataSource) {
+        try {
 
-        const email = req.body.email;
-        const user = { email: email }
-        const accessToken = generateToken(email);
-        const refreshToken = jwt.sign(email, process.env.JWTREFRESHKEY as string);
+            const email = req.body.email;
+            const user = { email: email }
+            const repo = database.getRepository(User)
+            await repo.findOneBy({
+                email: email
+            }).then(async (data) => {
+                if (data != null) {
+                    bcrypt.compare(req.body.password, data.password, (err: any, comparison: any) => {
+                        //if error than throw error
+                        if (err) {
+                            res.status(401).json({ message: "Bad credentials" })
 
-        res.json({ token: accessToken, refreshToken: refreshToken })
+                        }
+                        //if both match than you can do anything
+                        else if (comparison) {
+                            const accessToken = generateToken(data);
+                            res.status(200).json({ token: accessToken })
+                        } else {
+                            res.status(401).json({ msg: "Invalid credencial" })
+                        }
+
+                    })
+
+                } else {
+                    res.status(401).json({ message: "Bad credentials" })
+                }
+            })
+        } catch (error) {
+            res.status(401).json({ message: "Bad credentials" })
+        }
+
     }
+
 
     async addUserToGroup(req: any, res: any, database: DataSource) {
         try {

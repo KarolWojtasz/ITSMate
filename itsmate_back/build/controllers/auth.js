@@ -9,17 +9,19 @@ const auth = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
     if (token === null || token === undefined)
-        return res.status(401).json({ error: "error" });
-    jsonwebtoken_1.default.verify(token, process.env.JWTPRIVKEY, (err, email) => {
-        if (err)
-            return res.status(403).json({ error: "token not veryfied" });
-        req.email = email;
+        return res.status(401).json({ error: "no token provided" });
+    jsonwebtoken_1.default.verify(token, process.env.JWTPRIVKEY, (err, user) => {
+        if (err) {
+            console.log(err);
+            return res.status(403).json({ error: "token not verified" });
+        }
+        req.user = user;
         next();
     });
 };
 exports.auth = auth;
-const generateToken = (email) => {
-    return jsonwebtoken_1.default.sign(email, process.env.JWTPRIVKEY, { expiresIn: '10' });
+const generateToken = (user) => {
+    return jsonwebtoken_1.default.sign({ user: JSON.stringify(user) }, process.env.JWTPRIVKEY, { expiresIn: '1d' });
 };
 exports.generateToken = generateToken;
 //# sourceMappingURL=auth.js.map

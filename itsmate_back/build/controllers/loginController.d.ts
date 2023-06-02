@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 export default class loginController {
-    login(req: any, res: any, database: DataSource): void;
+    login(req: any, res: any, database: DataSource): Promise<void>;
     addUserToGroup(req: any, res: any, database: DataSource): Promise<void>;
     getUsers(req: any, res: any, database: DataSource): Promise<void>;
     getGroups(req: any, res: any, database: DataSource): Promise<void>;

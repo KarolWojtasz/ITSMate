@@ -1,19 +1,41 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tslib_1 = require("tslib");
 const GroupMembers_1 = require(".././models/GroupMembers");
 const Group_1 = require(".././models/Group");
 const User_1 = require(".././models/User");
 const auth_1 = require("./auth");
-const jsonwebtoken_1 = tslib_1.__importDefault(require("jsonwebtoken"));
 const bcrypt = require("bcrypt");
 class loginController {
-    login(req, res, database) {
-        const email = req.body.email;
-        const user = { email: email };
-        const accessToken = (0, auth_1.generateToken)(email);
-        const refreshToken = jsonwebtoken_1.default.sign(email, process.env.JWTREFRESHKEY);
-        res.json({ token: accessToken, refreshToken: refreshToken });
+    async login(req, res, database) {
+        try {
+            const email = req.body.email;
+            const user = { email: email };
+            const repo = database.getRepository(User_1.User);
+            await repo.findOneBy({
+                email: email
+            }).then(async (data) => {
+                if (data != null) {
+                    bcrypt.compare(req.body.password, data.password, (err, comparison) => {
+                        if (err) {
+                            res.status(401).json({ message: "Bad credentials" });
+                        }
+                        else if (comparison) {
+                            const accessToken = (0, auth_1.generateToken)(data);
+                            res.status(200).json({ token: accessToken });
+                        }
+                        else {
+                            res.status(401).json({ msg: "Invalid credencial" });
+                        }
+                    });
+                }
+                else {
+                    res.status(401).json({ message: "Bad credentials" });
+                }
+            });
+        }
+        catch (error) {
+            res.status(401).json({ message: "Bad credentials" });
+        }
     }
     async addUserToGroup(req, res, database) {
         try {
