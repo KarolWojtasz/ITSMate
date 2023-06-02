@@ -1,12 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
 const GroupMembers_1 = require(".././models/GroupMembers");
 const Group_1 = require(".././models/Group");
 const User_1 = require(".././models/User");
+const auth_1 = require("./auth");
+const jsonwebtoken_1 = tslib_1.__importDefault(require("jsonwebtoken"));
 const bcrypt = require("bcrypt");
 class loginController {
     login(req, res, database) {
-        res.json({ logged: true });
+        const email = req.body.email;
+        const user = { email: email };
+        const accessToken = (0, auth_1.generateToken)(email);
+        const refreshToken = jsonwebtoken_1.default.sign(email, process.env.JWTREFRESHKEY);
+        res.json({ token: accessToken, refreshToken: refreshToken });
     }
     async addUserToGroup(req, res, database) {
         try {

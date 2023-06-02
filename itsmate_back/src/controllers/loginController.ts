@@ -2,13 +2,21 @@ import { GroupMember } from ".././models/GroupMembers";
 import { Group } from ".././models/Group";
 import { User } from ".././models/User";
 import { DataSource } from "typeorm";
+import { generateToken } from "./auth";
+import jwt from "jsonwebtoken";
+
 const bcrypt = require("bcrypt")
 
 export default class loginController {
     //post
     login(req: any, res: any, database: DataSource) {
 
-        res.json({ logged: true })
+        const email = req.body.email;
+        const user = { email: email }
+        const accessToken = generateToken(email);
+        const refreshToken = jwt.sign(email, process.env.JWTREFRESHKEY as string);
+
+        res.json({ token: accessToken, refreshToken: refreshToken })
     }
 
     async addUserToGroup(req: any, res: any, database: DataSource) {

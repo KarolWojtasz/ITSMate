@@ -5,6 +5,7 @@ const express_1 = require("express");
 const DataSource_1 = tslib_1.__importDefault(require("./repository/DataSource"));
 const loginController_1 = tslib_1.__importDefault(require("./controllers/loginController"));
 const taskController_1 = tslib_1.__importDefault(require("./controllers/taskController"));
+const auth_1 = require("controllers/auth");
 class myRouter {
     routes;
     database;
@@ -21,7 +22,7 @@ class myRouter {
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
         });
-        this.routes.get('/getUsers', (req, res) => { this.loginController.getUsers(req, res, this.database); });
+        this.routes.get('/getUsers', auth_1.auth, (req, res) => { this.loginController.getUsers(req, res, this.database); });
         this.routes.put('/addUser', (req, res) => { this.loginController.addUser(req, res, this.database); });
         this.routes.put('/addGroup', (req, res) => { this.loginController.addGroup(req, res, this.database); });
         this.routes.delete('/deleteUser', (req, res) => { this.loginController.deleteUser(req, res, this.database); });
