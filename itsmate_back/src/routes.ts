@@ -38,8 +38,8 @@ export default class myRouter {
         this.routes.put('/addTask', auth, (req, res) => { this.taskController.addTask(req, res, this.database) });
         this.routes.delete('/deleteTask', auth, (req, res) => { this.taskController.deleteTask(req, res, this.database) });
         this.routes.get('/getAllTasks', auth, (req, res) => { this.taskController.getAllTasks(req, res, this.database) });
-        this.routes.get('/getTasksForUser', auth, (req, res) => { this.taskController.getTasksForUser(req, res, this.database) });
-        this.routes.get('/getTasksForGroup', auth, (req, res) => { this.taskController.getTasksForGroup(req, res, this.database) });
+        this.routes.post('/getTasksForUser', auth, (req, res) => { this.taskController.getTasksForUser(req, res, this.database) });
+        this.routes.post('/getTasksForGroup', auth, (req, res) => { this.taskController.getTasksForGroup(req, res, this.database) });
 
     }
     async getRoutes() {

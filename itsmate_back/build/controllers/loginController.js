@@ -21,7 +21,7 @@ class loginController {
                         }
                         else if (comparison) {
                             const accessToken = (0, auth_1.generateToken)(data);
-                            res.status(200).json({ token: accessToken });
+                            res.status(200).json({ token: accessToken, userId: data.id });
                         }
                         else {
                             res.status(401).json({ msg: "Invalid credencial" });

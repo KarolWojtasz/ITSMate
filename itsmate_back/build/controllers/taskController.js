@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = require(".././models/User");
 const Task_1 = require(".././models/Task");
 const Group_1 = require(".././models/Group");
+const GroupMembers_1 = require(".././models/GroupMembers");
 class taskController {
     async updateTask(req, res, database) {
         const repo = database.getRepository(Task_1.Task);
@@ -44,6 +45,19 @@ class taskController {
     }
     async getTasksForGroup(req, res, database) {
         try {
+            const repo = database.getRepository(GroupMembers_1.GroupMember);
+            const userGroup = await repo.find({
+                relations: {
+                    group: true,
+                    user: true
+                },
+                where: {
+                    user: {
+                        id: req.body.userId
+                    }
+                }
+            });
+            console.log(userGroup);
             const repo2 = database.getRepository(Task_1.Task);
             const grpList = await repo2.find({
                 relations: {
@@ -98,7 +112,7 @@ class taskController {
                     task.title = dataJson.title;
                     task.description = dataJson.description;
                     task.dueDate = dataJson.dueDate;
-                    task.priority = dataJson.priority;
+                    task.priority = 1;
                     task.attachment = dataJson.attachment;
                     task.creator = user;
                     task.stage = 0;

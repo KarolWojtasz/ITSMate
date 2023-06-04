@@ -23,12 +23,11 @@ export default class loginController {
                         //if error than throw error
                         if (err) {
                             res.status(401).json({ message: "Bad credentials" })
-
                         }
                         //if both match than you can do anything
                         else if (comparison) {
                             const accessToken = generateToken(data);
-                            res.status(200).json({ token: accessToken })
+                            res.status(200).json({ token: accessToken, userId: data.id })
                         } else {
                             res.status(401).json({ msg: "Invalid credencial" })
                         }

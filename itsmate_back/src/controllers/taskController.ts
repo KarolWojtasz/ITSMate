@@ -3,6 +3,7 @@ import { User } from ".././models/User";
 import { Task } from ".././models/Task";
 import { DataSource, FindOperator, Timestamp } from "typeorm";
 import { Group } from ".././models/Group";
+import { GroupMember } from ".././models/GroupMembers";
 
 export default class taskController {
 
@@ -27,7 +28,7 @@ export default class taskController {
 
     }
 
-    //get
+    //post
     async getTasksForUser(req: any, res: any, database: DataSource) {
         try {
             const repo2 = database.getRepository(Task)
@@ -51,6 +52,20 @@ export default class taskController {
 
     async getTasksForGroup(req: any, res: any, database: DataSource) {
         try {
+            const repo = database.getRepository(GroupMember)
+            const userGroup = await repo.find({
+                relations: {
+                    group: true,
+                    user: true
+                },
+                where: {
+                    user: {
+                        id: req.body.userId
+                    }
+
+                }
+            });
+            console.log(userGroup)
             const repo2 = database.getRepository(Task)
             const grpList = await repo2.find({
                 relations: {
@@ -107,7 +122,7 @@ export default class taskController {
                     task.title = dataJson.title;
                     task.description = dataJson.description;
                     task.dueDate = dataJson.dueDate;
-                    task.priority = dataJson.priority;
+                    task.priority = 1;
                     task.attachment = dataJson.attachment;
                     task.creator = user;
                     task.stage = 0;

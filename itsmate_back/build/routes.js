@@ -36,8 +36,8 @@ class myRouter {
         this.routes.put('/addTask', auth_1.auth, (req, res) => { this.taskController.addTask(req, res, this.database); });
         this.routes.delete('/deleteTask', auth_1.auth, (req, res) => { this.taskController.deleteTask(req, res, this.database); });
         this.routes.get('/getAllTasks', auth_1.auth, (req, res) => { this.taskController.getAllTasks(req, res, this.database); });
-        this.routes.get('/getTasksForUser', auth_1.auth, (req, res) => { this.taskController.getTasksForUser(req, res, this.database); });
-        this.routes.get('/getTasksForGroup', auth_1.auth, (req, res) => { this.taskController.getTasksForGroup(req, res, this.database); });
+        this.routes.post('/getTasksForUser', auth_1.auth, (req, res) => { this.taskController.getTasksForUser(req, res, this.database); });
+        this.routes.post('/getTasksForGroup', auth_1.auth, (req, res) => { this.taskController.getTasksForGroup(req, res, this.database); });
     }
     async getRoutes() {
         return this.routes;
