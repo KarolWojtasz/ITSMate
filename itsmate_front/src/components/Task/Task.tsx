@@ -8,7 +8,8 @@ export interface TaskProps {
     id: string,
     description: string;
     due: string;
-    creator: string;
+    title: string;
+    assignee: string | null;
     onClick?: () => void;
     useRef?: RefObject<HTMLInputElement>;
     className?: string;
@@ -29,7 +30,7 @@ export default class Task extends Component<TaskProps, TaskState> {
 
     };
     private redirectToTask = () => {
-        window.location.href = "/Task?" + this.props.id;
+        window.location.href = "/Task?id=" + this.props.id;
     }
 
 
@@ -39,6 +40,12 @@ export default class Task extends Component<TaskProps, TaskState> {
                 <div className={style.taksID}>
                     {this.props.id}
                 </div>
+                <div className={style.taskField}>
+                    <div className={style.fieldInfo}>Title:</div >
+                    {this.props.title}</div>
+                <div className={style.taskField}>
+                    <div className={style.fieldInfo}>Assigned to:</div >
+                    {this.props.assignee}</div>
                 <div className={style.taksDescription}>
                     <div className={style.fieldInfo}>Description:</div >
                     {this.props.description}
@@ -46,9 +53,7 @@ export default class Task extends Component<TaskProps, TaskState> {
                 <div className={style.taskField}>
                     <div className={style.fieldInfo}>Due:</div >
                     {this.props.due}</div>
-                <div className={style.taskField}>
-                    <div className={style.fieldInfo}>Created by:</div >
-                    {this.props.creator}</div>
+
                 <Button onClick={this.redirectToTask} text="More details"></Button>
             </div>
         );

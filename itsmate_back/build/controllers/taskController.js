@@ -5,6 +5,46 @@ const Task_1 = require(".././models/Task");
 const Group_1 = require(".././models/Group");
 const GroupMembers_1 = require(".././models/GroupMembers");
 class taskController {
+    async getTaskDetails(req, res, database) {
+        try {
+            const repo = database.getRepository(Task_1.Task);
+            await repo.find({
+                relations: {
+                    assignee: true,
+                    group: true,
+                    creator: true
+                },
+                where: {
+                    id: req.body.taskId
+                }
+            }).then(async (data) => {
+                res.status(200).json({ taskDetails: data });
+            });
+        }
+        catch (error) {
+            res.status(400).json({ message: "error" });
+        }
+    }
+    async assignTaskToMe(req, res, database) {
+        const repo = database.getRepository(Task_1.Task);
+        await repo.findOneBy({
+            id: req.body.taskId
+        }).then(async (data) => {
+            const repo2 = database.getRepository(User_1.User);
+            await repo2.findOneBy({
+                id: req.body.userId
+            }).then(async (data2) => {
+                if (data != null && data2 != null) {
+                    data.assignee = data2;
+                    await repo.save(data);
+                    res.status(200).json({ updated: true });
+                }
+                else {
+                    res.status(400).json({ updated: false });
+                }
+            });
+        });
+    }
     async updateTask(req, res, database) {
         const repo = database.getRepository(Task_1.Task);
         await repo.findOneBy({
@@ -49,7 +89,7 @@ class taskController {
             const userGroup = await repo.find({
                 relations: {
                     group: true,
-                    user: true
+                    user: true,
                 },
                 where: {
                     user: {
@@ -61,7 +101,8 @@ class taskController {
             const repo2 = database.getRepository(Task_1.Task);
             const grpList = await repo2.find({
                 relations: {
-                    group: true
+                    group: true,
+                    assignee: true,
                 },
                 where: {
                     group: {

@@ -6,28 +6,22 @@ import LeftBar from '../../components/LeftBar/LeftBar';
 import Button from '../../components/Button/Button';
 import RightBar from '../../components/RightBar/RightBar';
 import TaskDetails from '../../components/TaskDetails/TaskDetails';
+import { useSearchParams } from 'react-router-dom';
 
 
 
 function Task() {
-
+    const [searchParams, setSearchParams] = useSearchParams();
+    const taskId = searchParams.get("id");
 
     return (
         <Page>
             <LeftBar>
-                <Button text='Create task' onClick={() => window.location.href = '/CreateTask'} ></Button>
-                <Button text='My group tasks' onClick={() => window.location.href = '/GroupTasks'} ></Button>
-                <Button text='My task' onClick={() => window.location.href = '/'} ></Button>
-                <Button text='Logout' onClick={() => window.location.href = '/Login'} ></Button>
             </LeftBar>
-            <RightBar title='TSK1123213'>
-                <TaskDetails id={'TSK1123213'}
-                    description={'Please remove typos in lastest update'}
-                    due={'10.03.2023'} creator={'Karol Wojtasz'} workflow={2} group={'Front-end dev'}
-                    assignedTo={'Karol Wojtasz'}  ></TaskDetails>
-
-
-            </RightBar>        </Page>
+            <RightBar title={taskId ? taskId : ""}>
+                <TaskDetails id={taskId ? taskId : ""}></TaskDetails>
+            </RightBar>
+        </Page>
     );
 }
 

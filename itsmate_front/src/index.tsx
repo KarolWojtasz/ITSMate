@@ -8,13 +8,19 @@ import Task from './views/Task/Task';
 import TasksManager from './views/TasksManager/TasksManager';
 import UsersManager from './views/UsersManager/UsersManager';
 import GroupTasks from './views/GroupTasks/GroupTasks';
+import RestrictedRoute from './components/RestrictedRoute/RestrictedRoute';
 
+import { isLoggedIn } from './auth';
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
+    element: <RestrictedRoute
+      condition={isLoggedIn}
+      component={<Home />}
+      invalidComponent={<Login />}
+    />,
     errorElement: <div>404</div>,
   },
   {
@@ -25,31 +31,51 @@ const router = createBrowserRouter([
   ,
   {
     path: '/CreateTask',
-    element: <CreateTask />,
+    element: <RestrictedRoute
+      condition={isLoggedIn}
+      component={<CreateTask />}
+      invalidComponent={<Login />}
+    />,
     errorElement: <div>404</div>,
   }
   ,
   {
     path: '/Task',
-    element: <Task />,
+    element: <RestrictedRoute
+      condition={isLoggedIn}
+      component={<Task />}
+      invalidComponent={<Login />}
+    />,
     errorElement: <div>404</div>,
   }
   ,
   {
     path: '/TasksManager',
-    element: <TasksManager />,
+    element: <RestrictedRoute
+      condition={isLoggedIn}
+      component={<TasksManager />}
+      invalidComponent={<Login />}
+    />,
     errorElement: <div>404</div>,
   }
   ,
   {
     path: '/UsersManager',
-    element: <UsersManager />,
+    element: <RestrictedRoute
+      condition={isLoggedIn}
+      component={<UsersManager />}
+      invalidComponent={<Login />}
+    />,
     errorElement: <div>404</div>,
-  }
-  ,
+  },
+
   {
     path: '/GroupTasks',
-    element: <GroupTasks />,
+    element: <RestrictedRoute
+      condition={isLoggedIn}
+      component={<GroupTasks />}
+      invalidComponent={<Login />}
+    />,
     errorElement: <div>404</div>,
   }
 
@@ -58,7 +84,5 @@ const router = createBrowserRouter([
 let root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>,
+  <RouterProvider router={router} />
 );

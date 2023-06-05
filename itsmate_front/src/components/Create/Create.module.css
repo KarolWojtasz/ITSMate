@@ -27,3 +27,39 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border-radius: 20px;
 }
+
+.select {
+    border: none;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-size: 14px;
+    line-height: 20px;
+    width: 350px;
+    height: 65px;
+    box-sizing: border-box;
+    background: #3C3B3B;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    margin-bottom: 60px;
+}
+
+.select option {
+    border: none;
+
+    font-family: 'Roboto';
+    font-style: normal;
+    font-size: 14px;
+    line-height: 20px;
+    width: 350px;
+    height: 65px;
+    box-sizing: border-box;
+    background: #3C3B3B;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+    margin-bottom: 60px;
+}

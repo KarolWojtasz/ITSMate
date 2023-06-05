@@ -16,11 +16,7 @@ function CreateTask() {
     return (
         <Page>
             <LeftBar>
-                <h3>Hello Karol</h3>
-                <Button text='Create task' onClick={() => window.location.href = '/CreateTask'} ></Button>
-                <Button text='My group tasks' onClick={() => window.location.href = '/GroupTasks'} ></Button>
-                <Button text='My task' onClick={() => window.location.href = '/'} ></Button>
-                <Button text='Logout' onClick={() => window.location.href = '/Login'} ></Button>
+
             </LeftBar>
             <RightBar title='Create task'>
 

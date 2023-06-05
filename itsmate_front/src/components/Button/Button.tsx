@@ -3,7 +3,7 @@ import { Component } from 'react';
 import style from './Button.module.css';
 
 
-export interface InputProps {
+export interface ButtonProps {
     link?: string,
     text: string;
     onClick?: () => void;
@@ -12,7 +12,7 @@ export interface InputProps {
     id?: string;
 }
 
-export default class Button extends Component<InputProps> {
+export default class Button extends Component<ButtonProps> {
 
     render() {
         return (

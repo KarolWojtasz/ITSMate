@@ -9,7 +9,6 @@ class loginController {
     async login(req, res, database) {
         try {
             const email = req.body.email;
-            const user = { email: email };
             const repo = database.getRepository(User_1.User);
             await repo.findOneBy({
                 email: email
@@ -21,7 +20,7 @@ class loginController {
                         }
                         else if (comparison) {
                             const accessToken = (0, auth_1.generateToken)(data);
-                            res.status(200).json({ token: accessToken, userId: data.id });
+                            res.status(200).json({ token: accessToken, userId: data.id, admin: data.isManager });
                         }
                         else {
                             res.status(401).json({ msg: "Invalid credencial" });
@@ -43,12 +42,33 @@ class loginController {
             grMember.groupId = req.body.groupId;
             grMember.userId = req.body.userId;
             if (await database.manager.save(grMember))
-                res.status(200).json({ message: "user assigned to group" });
+                res.status(200).json({ added: true });
             else
-                res.status(400).json({ message: "Error assigning to group" });
+                res.status(400).json({ added: false });
         }
         catch (error) {
             res.status(400).json({ message: error });
+        }
+    }
+    async getGroupMembers(req, res, database) {
+        try {
+            const repo = database.getRepository(GroupMembers_1.GroupMember);
+            await repo.find({
+                relations: {
+                    group: true,
+                    user: true
+                },
+                where: {
+                    group: {
+                        id: req.body.groupId
+                    }
+                }
+            }).then(async (data) => {
+                res.status(200).json({ groupMembers: data });
+            });
+        }
+        catch (error) {
+            res.status(400).json({ message: "error" });
         }
     }
     async getUsers(req, res, database) {
@@ -125,22 +145,35 @@ class loginController {
         const dataJson = req.body;
         const user = new User_1.User();
         try {
-            user.email = dataJson.email;
-            user.name = dataJson.name;
-            const salt = bcrypt.genSaltSync(10);
-            user.password = bcrypt.hashSync(dataJson.password, salt);
-            if (await database.manager.save(user))
-                res.status(201).json({ message: "registered" });
-            else
-                res.status(400).json({ message: "Error registering user" });
+            if (dataJson.password !== dataJson.passwordConfirm)
+                return res.status(400).json({ message: "Error registering user" });
+            const repo = database.getRepository(User_1.User);
+            await repo.findOneBy({
+                email: dataJson.email
+            }).then(async (usr) => {
+                if (usr)
+                    return res.status(400).json({ message: "Error registering user" });
+                else {
+                    user.email = dataJson.email;
+                    user.name = dataJson.name;
+                    user.isManager = dataJson.isManager;
+                    const salt = bcrypt.genSaltSync(10);
+                    user.password = bcrypt.hashSync(dataJson.password, salt);
+                    if (await database.manager.save(user))
+                        return res.status(201).json({ message: "registered" });
+                    else
+                        return res.status(400).json({ message: "Error registering user" });
+                }
+            });
         }
         catch (error) {
             console.log(error);
-            res.status(400).json({ message: error });
+            return res.status(400).json({ message: error });
         }
     }
     async addGroup(req, res, database) {
         const dataJson = req.body;
+        console.log(dataJson);
         const group = new Group_1.Group();
         try {
             group.name = dataJson.name;
@@ -150,7 +183,6 @@ class loginController {
                 res.status(400).json({ message: "Error creating group" });
         }
         catch (error) {
-            console.log(error);
             res.status(400).json({ message: error });
         }
     }

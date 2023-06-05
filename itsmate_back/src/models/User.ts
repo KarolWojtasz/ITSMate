@@ -15,6 +15,9 @@ export class User {
     @Column()
     password!: string;
 
+    @Column({ default: false })
+    isManager!: boolean;
+
     @OneToMany(() => Task, task => task.assignee)
     assignedTasks!: Task[];
 

@@ -6,7 +6,53 @@ import { Group } from ".././models/Group";
 import { GroupMember } from ".././models/GroupMembers";
 
 export default class taskController {
+    //post
+    async getTaskDetails(req: any, res: any, database: DataSource) {
+        try {
+            const repo = database.getRepository(Task)
+            await repo.find({
 
+                relations: {
+                    assignee: true,
+                    group: true,
+                    creator: true
+                },
+                where: {
+                    id: req.body.taskId
+                }
+
+            }).then(async (data) => {
+                res.status(200).json({ taskDetails: data })
+            })
+        } catch (error) {
+            res.status(400).json({ message: "error" })
+
+        }
+
+
+    }
+    //post
+    async assignTaskToMe(req: any, res: any, database: DataSource) {
+        const repo = database.getRepository(Task)
+        await repo.findOneBy({
+            id: req.body.taskId
+        }).then(async (data) => {
+            const repo2 = database.getRepository(User)
+            await repo2.findOneBy({
+                id: req.body.userId
+            }).then(async (data2) => {
+                if (data != null && data2 != null) {
+                    data.assignee = data2;
+                    await repo.save(data)
+                    res.status(200).json({ updated: true })
+                } else {
+                    res.status(400).json({ updated: false })
+                }
+            })
+
+        })
+
+    }
     //post
     async updateTask(req: any, res: any, database: DataSource) {
         const repo = database.getRepository(Task)
@@ -56,7 +102,7 @@ export default class taskController {
             const userGroup = await repo.find({
                 relations: {
                     group: true,
-                    user: true
+                    user: true,
                 },
                 where: {
                     user: {
@@ -64,12 +110,13 @@ export default class taskController {
                     }
 
                 }
-            });
+            })
             console.log(userGroup)
             const repo2 = database.getRepository(Task)
             const grpList = await repo2.find({
                 relations: {
-                    group: true
+                    group: true,
+                    assignee: true,
                 },
                 where: {
                     group: {

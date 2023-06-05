@@ -23,7 +23,7 @@ class myRouter {
             next();
         });
         this.routes.get('/getUsers', auth_1.auth, (req, res) => { this.loginController.getUsers(req, res, this.database); });
-        this.routes.put('/addUser', (req, res) => { this.loginController.addUser(req, res, this.database); });
+        this.routes.put('/addUser', auth_1.auth, (req, res) => { this.loginController.addUser(req, res, this.database); });
         this.routes.put('/addGroup', auth_1.auth, (req, res) => { this.loginController.addGroup(req, res, this.database); });
         this.routes.delete('/deleteUser', auth_1.auth, (req, res) => { this.loginController.deleteUser(req, res, this.database); });
         this.routes.delete('/deleteGroup', auth_1.auth, (req, res) => { this.loginController.deleteGroup(req, res, this.database); });
@@ -32,12 +32,15 @@ class myRouter {
         this.routes.get('/getGroups', auth_1.auth, (req, res) => { this.loginController.getGroups(req, res, this.database); });
         this.routes.post('/login', (req, res) => { this.loginController.login(req, res, this.database); });
         this.routes.post('/addUserToGroup', auth_1.auth, (req, res) => { this.loginController.addUserToGroup(req, res, this.database); });
+        this.routes.post('/getGroupMembers', auth_1.auth, (req, res) => { this.loginController.getGroupMembers(req, res, this.database); });
         this.routes.post('/updateTask', auth_1.auth, (req, res) => { this.taskController.updateTask(req, res, this.database); });
         this.routes.put('/addTask', auth_1.auth, (req, res) => { this.taskController.addTask(req, res, this.database); });
         this.routes.delete('/deleteTask', auth_1.auth, (req, res) => { this.taskController.deleteTask(req, res, this.database); });
         this.routes.get('/getAllTasks', auth_1.auth, (req, res) => { this.taskController.getAllTasks(req, res, this.database); });
         this.routes.post('/getTasksForUser', auth_1.auth, (req, res) => { this.taskController.getTasksForUser(req, res, this.database); });
         this.routes.post('/getTasksForGroup', auth_1.auth, (req, res) => { this.taskController.getTasksForGroup(req, res, this.database); });
+        this.routes.post('/getTaskDetails', auth_1.auth, (req, res) => { this.taskController.getTaskDetails(req, res, this.database); });
+        this.routes.post('/assignTaskToMe', auth_1.auth, (req, res) => { this.taskController.assignTaskToMe(req, res, this.database); });
     }
     async getRoutes() {
         return this.routes;
