@@ -4,6 +4,7 @@ import { User } from ".././models/User";
 import { DataSource } from "typeorm";
 import { generateToken } from "./auth";
 import jwt from "jsonwebtoken";
+import { Task } from ".././models/Task";
 
 const bcrypt = require("bcrypt")
 
@@ -70,7 +71,6 @@ export default class loginController {
                     group: {
                         id: req.body.groupId
                     }
-
                 }
 
             }).then(async (data) => {
@@ -106,19 +106,37 @@ export default class loginController {
 
     //delete
     async deleteUser(req: any, res: any, database: DataSource) {
-        const repo = database.getRepository(User)
-        await repo.findOneBy({
-            id: req.body.userId
-        }).then(async (user) => {
-            if (user != null) {
-                await repo.remove(user)
-                res.status(200).json({ deleted: true })
+        const repo3 = database.getRepository(Task);
+        const repo2 = database.getRepository(GroupMember);
+        const repo = database.getRepository(User);
+
+        try {
+            const tasksToUpdate = await repo3.findBy({ assignee: req.body.userId });
+            tasksToUpdate.forEach((task: any) => {
+                task.assignee = null;
+            });
+            await repo3.save(tasksToUpdate);
+
+            const tasksToUpdateAgain = await repo3.findBy({ creator: req.body.userId });
+            tasksToUpdateAgain.forEach((task: any) => {
+                task.creator = null;
+            });
+            await repo3.save(tasksToUpdateAgain);
+
+            const membersToRemove = await repo2.findBy({ userId: req.body.userId });
+            await repo2.remove(membersToRemove);
+
+            const user = await repo.findOneBy({ id: req.body.userId });
+            if (user) {
+                await repo.remove(user);
+                res.status(200).json({ deleted: true });
             } else {
-                res.status(400).json({ deleted: false })
-
+                res.status(400).json({ deleted: false });
             }
-
-        })
+        } catch (error) {
+            // Handle error
+            res.status(500).json({ error: 'An error occurred' });
+        }
     }
     async deleteUserFromGroup(req: any, res: any, database: DataSource) {
         const repo = database.getRepository(GroupMember)

@@ -31,7 +31,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", String)
 ], Task.prototype, "description", void 0);
 tslib_1.__decorate([
-    (0, typeorm_1.ManyToOne)(() => User_1.User),
+    (0, typeorm_1.ManyToOne)(() => User_1.User || null),
     tslib_1.__metadata("design:type", User_1.User)
 ], Task.prototype, "assignee", void 0);
 tslib_1.__decorate([
@@ -39,7 +39,7 @@ tslib_1.__decorate([
     tslib_1.__metadata("design:type", Group_1.Group)
 ], Task.prototype, "group", void 0);
 tslib_1.__decorate([
-    (0, typeorm_1.ManyToOne)(() => User_1.User),
+    (0, typeorm_1.ManyToOne)(() => User_1.User || null),
     tslib_1.__metadata("design:type", User_1.User)
 ], Task.prototype, "creator", void 0);
 tslib_1.__decorate([

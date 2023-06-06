@@ -52,7 +52,7 @@ export default class Task extends Component<TaskProps, TaskState> {
                 </div>
                 <div className={style.taskField}>
                     <div className={style.fieldInfo}>Due:</div >
-                    {this.props.due}</div>
+                    {new Date(this.props.due).toLocaleDateString('en-US')} {new Date(this.props.due).toLocaleTimeString('en-US')}</div>
 
                 <Button onClick={this.redirectToTask} text="More details"></Button>
             </div>

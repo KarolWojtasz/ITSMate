@@ -4,6 +4,7 @@ const GroupMembers_1 = require(".././models/GroupMembers");
 const Group_1 = require(".././models/Group");
 const User_1 = require(".././models/User");
 const auth_1 = require("./auth");
+const Task_1 = require(".././models/Task");
 const bcrypt = require("bcrypt");
 class loginController {
     async login(req, res, database) {
@@ -92,18 +93,34 @@ class loginController {
         }
     }
     async deleteUser(req, res, database) {
+        const repo3 = database.getRepository(Task_1.Task);
+        const repo2 = database.getRepository(GroupMembers_1.GroupMember);
         const repo = database.getRepository(User_1.User);
-        await repo.findOneBy({
-            id: req.body.userId
-        }).then(async (user) => {
-            if (user != null) {
+        try {
+            const tasksToUpdate = await repo3.findBy({ assignee: req.body.userId });
+            tasksToUpdate.forEach((task) => {
+                task.assignee = null;
+            });
+            await repo3.save(tasksToUpdate);
+            const tasksToUpdateAgain = await repo3.findBy({ creator: req.body.userId });
+            tasksToUpdateAgain.forEach((task) => {
+                task.creator = null;
+            });
+            await repo3.save(tasksToUpdateAgain);
+            const membersToRemove = await repo2.findBy({ userId: req.body.userId });
+            await repo2.remove(membersToRemove);
+            const user = await repo.findOneBy({ id: req.body.userId });
+            if (user) {
                 await repo.remove(user);
                 res.status(200).json({ deleted: true });
             }
             else {
                 res.status(400).json({ deleted: false });
             }
-        });
+        }
+        catch (error) {
+            res.status(500).json({ error: 'An error occurred' });
+        }
     }
     async deleteUserFromGroup(req, res, database) {
         const repo = database.getRepository(GroupMembers_1.GroupMember);

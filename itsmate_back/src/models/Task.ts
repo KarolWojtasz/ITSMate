@@ -13,13 +13,13 @@ export class Task {
     @Column()
     description!: string;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User || null)
     assignee!: User;
 
     @ManyToOne(() => Group)
     group!: Group;
 
-    @ManyToOne(() => User)
+    @ManyToOne(() => User || null)
     creator!: User;
 
     @Column({ type: "timestamp with time zone", default: () => "CURRENT_TIMESTAMP" })

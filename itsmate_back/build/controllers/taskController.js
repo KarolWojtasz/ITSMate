@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const User_1 = require(".././models/User");
 const Task_1 = require(".././models/Task");
+const typeorm_1 = require("typeorm");
 const Group_1 = require(".././models/Group");
 const GroupMembers_1 = require(".././models/GroupMembers");
 class taskController {
@@ -87,17 +88,12 @@ class taskController {
         try {
             const repo = database.getRepository(GroupMembers_1.GroupMember);
             const userGroup = await repo.find({
-                relations: {
-                    group: true,
-                    user: true,
-                },
                 where: {
-                    user: {
-                        id: req.body.userId
-                    }
+                    userId: req.body.userId
                 }
             });
-            console.log(userGroup);
+            var groupsId = userGroup.map(t => t.groupId);
+            console.log(groupsId);
             const repo2 = database.getRepository(Task_1.Task);
             const grpList = await repo2.find({
                 relations: {
@@ -106,7 +102,7 @@ class taskController {
                 },
                 where: {
                     group: {
-                        id: req.body.groupId
+                        id: (0, typeorm_1.In)(groupsId)
                     }
                 }
             });

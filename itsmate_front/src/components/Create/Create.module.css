@@ -28,7 +28,8 @@
     border-radius: 20px;
 }
 
-.select {
+.select,
+.dateInput {
     border: none;
 
     font-family: 'Roboto';

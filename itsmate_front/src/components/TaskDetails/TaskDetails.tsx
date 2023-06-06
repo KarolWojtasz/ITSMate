@@ -4,10 +4,12 @@ import style from './TaskDetails.module.css';
 import Button from '../Button/Button';
 import workflowArrow from '../../images/workflowArrow.png';
 import Input from '../Input/Input';
+import { isManager } from '../../auth';
 
 const fetchUrl = `${process.env.REACT_APP_BACKEND_URL}/getTaskDetails`;
 const moveUrl = `${process.env.REACT_APP_BACKEND_URL}/updateTask`;
 const assignUrl = `${process.env.REACT_APP_BACKEND_URL}/assignTaskToMe`;
+const deleteUrl = `${process.env.REACT_APP_BACKEND_URL}/deleteTask`;
 
 export interface TaskDetailsProps {
     id: string,
@@ -78,16 +80,43 @@ export default class TaskDetails extends Component<TaskDetailsProps, TaskDetails
                 .then((body) => {
                     if (body.updated)
                         // eslint-disable-next-line no-restricted-globals
-                        //location.reload();
-                        console.log(body)
+                        location.reload();
                 });
         } catch (err) {
             console.log("conn error");
         }
     }
+    private deleteTask = () => {
+        const body = {
+            taskId: this.props.id,
+        }
+        const requestOptions = {
+            method: 'DELETE',
+            headers: {
+                'Authorization': "Bearer " + sessionStorage.getItem("userToken"),
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Credentials': 'true'
+            },
+            body: JSON.stringify(body)
+        };
+        try {
+            const response = fetch(deleteUrl, requestOptions)
+                .then((response) => response.json())
+                .then((body) => {
+                    if (body.deleted)
+                        // eslint-disable-next-line no-restricted-globals
+                        location.replace("/tasksManager");
+                    console.log(body)
+                });
+        } catch (err) {
+            console.log("conn error");
+        }
+    }
+
     private move = (num: number) => {
 
-        if (this.state.fetchObj.assignee.id != sessionStorage.getItem("userId")) {
+        if (this.state.fetchObj.assignee != null && this.state.fetchObj.assignee.id != sessionStorage.getItem("userId") && !isManager()) {
             alert("Task is not assigned to You!!!")
             return;
         }
@@ -163,10 +192,10 @@ export default class TaskDetails extends Component<TaskDetailsProps, TaskDetails
                         <div className={style.row}>
                             <div className={style.taskField}>
                                 <div className={style.fieldInfo}>Created by:</div >
-                                {this.state.fetchObj.creator.name}</div>
+                                {this.state.fetchObj.creator != null ? this.state.fetchObj.creator.name : "User not exist"}</div>
                             <div className={style.taskField}>
                                 <div className={style.fieldInfo}>Due:</div >
-                                {this.state.fetchObj.dueDate}</div>
+                                {new Date(this.state.fetchObj.dueDate).toLocaleDateString('en-US')} {new Date(this.state.fetchObj.dueDate).toLocaleTimeString('en-US')}</div>
                         </div>
                         <div className={style.taksDescription}>
                             <div className={style.fieldInfo}>Title:</div >
@@ -187,16 +216,27 @@ export default class TaskDetails extends Component<TaskDetailsProps, TaskDetails
                                 {this.state.fetchObj.assignee ? this.state.fetchObj.assignee.name : "Not assigned"}
                             </div>
                         </div>
-                        {this.state.fetchObj.assignee != null ?
+                        {isManager() ?
                             <div className={style.row}>
                                 <Button onClick={this.back} text="Move backward..." ></Button>
-                                <Button onClick={this.forward} text="Move forward..."></Button>
-                            </div>
-                            :
-                            <div className={style.row}>
                                 <Button onClick={this.assignToMe} text="Assign task to me" ></Button>
+                                <Button onClick={this.deleteTask} text="Delete task"></Button>
+                                <Button onClick={this.forward} text="Move forward..."></Button>
+
                             </div>
+                            : <>{
+                                this.state.fetchObj.assignee != null ?
+                                    <div className={style.row}>
+                                        <Button onClick={this.back} text="Move backward..." ></Button>
+                                        <Button onClick={this.forward} text="Move forward..."></Button>
+                                    </div>
+                                    :
+                                    <div className={style.row}>
+                                        <Button onClick={this.assignToMe} text="Assign task to me" ></Button>
+                                    </div>
+                            }</>
                         }
+
                     </>
                     : null}
 

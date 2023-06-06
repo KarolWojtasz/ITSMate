@@ -1,4 +1,4 @@
-import { Component, createRef, RefObject } from 'react';
+import { Component, createRef, RefObject, SyntheticEvent } from 'react';
 
 import style from './Create.module.css';
 import Button from '../Button/Button';
@@ -13,7 +13,8 @@ export interface CreateProps {
 }
 export interface CreateState {
     expanded: boolean;
-    options: Array<object>
+    options: Array<object>,
+    date: string
 }
 
 
@@ -28,7 +29,8 @@ export default class Create extends Component<CreateProps, CreateState> {
         super(props);
         this.state = {
             expanded: false,
-            options: []
+            options: [],
+            date: ""
         };
         this.desc = createRef();
         this.due = createRef();
@@ -83,14 +85,19 @@ export default class Create extends Component<CreateProps, CreateState> {
             const response = fetch(createUrl, requestOptions)
                 .then((response) => response.json())
                 .then((body) => {
-                    this.setState(
-                        { options: body.allGroups }
-                    )
+                    console.log(body)
+                    if (body.message == "task created")
+                        // eslint-disable-next-line no-restricted-globals
+                        location.reload()
+
                 });
         } catch (err) {
             console.log("conn error");
         }
 
+    }
+    handleDateChange = (event: { target: { value: any; }; }) => {
+        this.setState({ date: event.target?.value })
     }
 
     render() {
@@ -106,15 +113,13 @@ export default class Create extends Component<CreateProps, CreateState> {
                     <Input useRef={this.desc} text={'Description'} ></Input>
 
                 </div>
-                <div className={style.taskField}>
-                    <div className={style.fieldInfo}>Attachments:</div >
-                    <input ref={this.attach} multiple className={style.createInput} type='file'></input>
-                </div>
 
                 <div className={style.taskField}>
                     <div className={style.fieldInfo}>Due:</div >
-                    <Input useRef={this.due} text={'Due date'} ></Input>
-
+                    <input className={style.dateInput} ref={this.due} type="datetime-local"
+                        value={this.state.date}
+                        onChange={this.handleDateChange}
+                    />
                 </div>
                 <div className={style.taskField}>
                     <div className={style.fieldInfo}>Assigned to group:</div >

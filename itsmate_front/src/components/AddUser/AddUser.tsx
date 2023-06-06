@@ -42,7 +42,7 @@ export default class AddUser extends Component<AddUserProps, AddUserState> {
             email: this.email.current?.value,
             password: this.password.current?.value,
             passwordConfirm: this.passwordConfirm.current?.value,
-            isManager: this.manager.current?.value,
+            isManager: this.manager.current?.checked,
         }
         const requestOptions = {
             method: 'PUT',
@@ -54,6 +54,7 @@ export default class AddUser extends Component<AddUserProps, AddUserState> {
             },
             body: JSON.stringify(body)
         };
+        console.log(body)
         try {
             const response = fetch(createUrl, requestOptions)
                 .then((response) => response.json())

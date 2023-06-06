@@ -1,7 +1,7 @@
 
 import { User } from ".././models/User";
 import { Task } from ".././models/Task";
-import { DataSource, FindOperator, Timestamp } from "typeorm";
+import { ArrayContainedBy, ArrayContains, DataSource, FindOperator, In, Timestamp } from "typeorm";
 import { Group } from ".././models/Group";
 import { GroupMember } from ".././models/GroupMembers";
 
@@ -100,18 +100,13 @@ export default class taskController {
         try {
             const repo = database.getRepository(GroupMember)
             const userGroup = await repo.find({
-                relations: {
-                    group: true,
-                    user: true,
-                },
                 where: {
-                    user: {
-                        id: req.body.userId
-                    }
-
+                    userId: req.body.userId
                 }
             })
-            console.log(userGroup)
+            var groupsId = userGroup.map(t => t.groupId);
+            console.log(groupsId)
+
             const repo2 = database.getRepository(Task)
             const grpList = await repo2.find({
                 relations: {
@@ -120,7 +115,7 @@ export default class taskController {
                 },
                 where: {
                     group: {
-                        id: req.body.groupId
+                        id: In(groupsId)
                     }
 
                 }

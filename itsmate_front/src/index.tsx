@@ -10,7 +10,7 @@ import UsersManager from './views/UsersManager/UsersManager';
 import GroupTasks from './views/GroupTasks/GroupTasks';
 import RestrictedRoute from './components/RestrictedRoute/RestrictedRoute';
 
-import { isLoggedIn } from './auth';
+import { isLoggedIn, isManager } from './auth';
 
 
 const router = createBrowserRouter([
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
   {
     path: '/TasksManager',
     element: <RestrictedRoute
-      condition={isLoggedIn}
+      condition={isManager}
       component={<TasksManager />}
       invalidComponent={<Login />}
     />,
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
   {
     path: '/UsersManager',
     element: <RestrictedRoute
-      condition={isLoggedIn}
+      condition={isManager}
       component={<UsersManager />}
       invalidComponent={<Login />}
     />,
