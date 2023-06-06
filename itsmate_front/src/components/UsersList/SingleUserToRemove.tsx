@@ -24,6 +24,10 @@ export default class SingleUserToRemove extends Component<SingleUserToRemoveProp
         super(props);
     };
     deleteUser = () => {
+        if (sessionStorage.getItem("userId") == this.props.userId) {
+            alert("You cannot remove yourself");
+            return;
+        }
         const body = {
             userId: this.props.userId,
         }
@@ -42,7 +46,6 @@ export default class SingleUserToRemove extends Component<SingleUserToRemoveProp
             const response = fetch(deleteUrl, requestOptions)
                 .then((response) => response.json())
                 .then((body) => {
-                    console.log(body)
                     if (body.deleted)
                         // eslint-disable-next-line no-restricted-globals
                         location.reload()
